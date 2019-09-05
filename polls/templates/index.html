@@ -21,22 +21,40 @@
     padding: 20px;
     width: 44%;
     display: inline-block  }
+    .form-articulo{
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin: auto;
+    width: 50%;
+    }
+    .form-articulo>input{
+      border-radius: 6px;
+      width: 36%;
+      border: 1px solid black
+    }
+    .form-articulo>button{
+      border-radius: 6px;
+      width: 24%;
+      border: 1px solid #dddd;
+    }
  </style>
 <body>
-        <div>
-          <div id="app">
+        <div id="app">
+         
                 <div v-for="(item,index) in arreglo.slice().reverse()"class="capsula">
                     ${item.article_body}
-                    <b-button style="margin-left:2px" class="float-right" v-b-modal="'modal_articulo_'+item.article_id"><i class="fa fa-close"></i></b-button>
+                    <b-button style="margin-left:2px" class="float-right" v-on:click="EliminarArticulo(item.article_id)"><i class="fa fa-close"></i></b-button>
                   
                     <b-button class="float-right" v-b-modal="'modal_articulo_'+item.article_id">${item.article_id} Modal</b-button>
                     <b-modal :id="'modal_articulo_'+item.article_id" title="BootstrapVue" ok-only>
                       <p class="my-4">${item.article_heading}</p>
                     </b-modal>
                   </div>
+                  <div  class="form-articulo">
                 <input type="text" v-model="head"/>
                 <input type="text" v-model="body"/>
-            <button v-on:click="AgregarArticulo">Aers</button>
+            <button v-on:click="AgregarArticulo">Agregar</button>
         </div>  
     </div>
 </body>
@@ -56,6 +74,12 @@
     this.Mostrar();
   },
   methods:{
+    EliminarArticulo:function(idArticulo){
+      console.log(idArticulo);
+      axios.delete('/api/article/'+idArticulo,{article_body: vue.body, article_heading: vue.head}).then(function(response){
+      vue.Mostrar();});
+    
+    },
     AgregarArticulo:function(event){
       this.Agregar();
     }
